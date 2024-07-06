@@ -1,4 +1,3 @@
-import "./App.css";
 import TodosContainer from "./components/containers/TodosContainer";
 
 function App() {

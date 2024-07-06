@@ -1,39 +1,35 @@
-// Define the props interface
+import React from "react";
+
 interface TodoItemProps {
-  id: string; //nanoid
+  id: string; // nanoid()
   name: string;
   completed: boolean;
   handleDelete: () => void;
   handleCheck: () => void;
 }
 
-// Define the TodoItem component
-const TodoItem = ({
+const TodoItem: React.FC<TodoItemProps> = ({
   id,
   name,
   completed,
   handleDelete,
   handleCheck,
-}: TodoItemProps) => {
-  //   // 1. ***State***
-
-  //   // 2. ***Behavior***
-
-  //   // 3. ***Render***
-
+}) => {
   return (
-    <li key={id}>
-      <label htmlFor={name}>
-        {name}
-        <input
-          type="checkbox"
-          name={name}
-          id={id.toString()}
-          checked={completed}
-          onChange={handleCheck}
-        />
-      </label>
-      <p>Status : {completed ? "Complété" : "Non complété"}</p>
+    <li
+      key={id}
+      className="flex items-center justify-between gap-1 bg-gray-100 p-4 rounded mb-2 shadow-sm"
+    >
+      {" "}
+      {name}
+      <p>Status: {completed ? "Complété" : "Non complété"}</p>
+      <input
+        type="checkbox"
+        name={name}
+        id={id}
+        checked={completed}
+        onChange={handleCheck}
+      />
       <button type="button" onClick={handleDelete}>
         ❌
       </button>
