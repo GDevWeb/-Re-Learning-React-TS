@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 interface TodoItemProps {
   id: string; // nanoid()
@@ -8,33 +8,31 @@ interface TodoItemProps {
   handleCheck: () => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({
-  id,
-  name,
-  completed,
-  handleDelete,
-  handleCheck,
-}) => {
-  return (
-    <li
-      key={id}
-      className="flex items-center justify-between gap-1 bg-gray-100 p-4 rounded mb-2 shadow-sm"
-    >
-      {" "}
-      {name}
-      <p>Status: {completed ? "Complété" : "Non complété"}</p>
-      <input
-        type="checkbox"
-        name={name}
-        id={id}
-        checked={completed}
-        onChange={handleCheck}
-      />
-      <button type="button" onClick={handleDelete}>
-        ❌
-      </button>
-    </li>
-  );
-};
+const TodoItem: React.FC<TodoItemProps> = memo(
+  ({ id, name, completed, handleDelete, handleCheck }) => {
+    return (
+      <li
+        key={id}
+        className="flex items-center justify-between gap-1 bg-gray-100 p-4 rounded mb-2 shadow-sm"
+      >
+        {" "}
+        <span id={`label-${id}`}>{name}</span>
+        <label htmlFor={name}></label>
+        {completed ? "Terminé" : "En cours"}
+        <input
+          type="checkbox"
+          name={name}
+          id={id}
+          checked={completed}
+          onChange={handleCheck}
+          aria-labelledby={`label-${id}`}
+        />
+        <button type="button" onClick={handleDelete}>
+          ❌
+        </button>
+      </li>
+    );
+  }
+);
 
 export default TodoItem;
