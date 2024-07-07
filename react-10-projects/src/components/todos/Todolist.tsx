@@ -1,12 +1,29 @@
-const Todolist = () => {
-  // Render the todo items
+import { EnumtodoItem as EnumtypeItem } from "../todos/todoArray";
+import TodoItem from "./TodoItem";
 
-  // Render the component
+interface ToDoListProps {
+  todos: EnumtypeItem[];
+  handleDelete: (id: string) => void;
+  handleCheck: (id: string) => void;
+}
+
+export default function ToDoList({
+  todos,
+  handleDelete,
+  handleCheck,
+}: ToDoListProps) {
   return (
-    <>
-      <h2>Liste des tâches</h2>
-    </>
+    <ul className="mb-4">
+      {todos.map((todo) => (
+        <TodoItem
+          key={todo.id}
+          id={todo.id}
+          name={todo.name}
+          completed={todo.completed}
+          handleDelete={() => handleDelete(todo.id)}
+          handleCheck={() => handleCheck(todo.id)}
+        />
+      ))}
+    </ul>
   );
-};
-
-export default Todolist;
+}

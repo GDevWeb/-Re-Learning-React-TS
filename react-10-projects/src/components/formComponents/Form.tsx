@@ -1,9 +1,10 @@
 import { nanoid } from "nanoid";
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
+import ButtonForm from "../todos/Button";
 import Input from "../todos/Input";
 import Label from "../todos/Label";
 import todoArray, { EnumtodoItem as EnumtypeItem } from "../todos/todoArray";
-import TodoItem from "../todos/TodoItem";
+import ToDoList from "../todos/Todolist";
 
 export default function Form() {
   // 1. ***State***
@@ -14,11 +15,13 @@ export default function Form() {
 
   // LocalStorage :
 
-  // ClearErrorMessage  after 20 secondes:
+  // ClearErrorMessage  after 20 seconds:
   useEffect(() => {
-    setTimeout(() => {
-      setError("");
+    const timer = setTimeout(() => {
+      setError(null);
     }, 20000);
+
+    return () => clearTimeout(timer);
   }, [error]);
 
   // 2. ***Behavior***
@@ -28,9 +31,6 @@ export default function Form() {
       addTask(inputState);
       setInputState("");
     } else {
-      console.error(
-        "Impossible de soumettre le formulaire dû à une erreur de validation"
-      );
       setError(
         "Impossible de soumettre le formulaire dû à une erreur de validation"
       );
@@ -53,7 +53,6 @@ export default function Form() {
       setInputState(value);
     } catch (error: any) {
       setError(error.message);
-      console.error(error.message);
     }
   };
 
@@ -61,7 +60,6 @@ export default function Form() {
 
   // Create:
   const addTask = (newTask: string) => {
-    console.log("Nouvelle tâche :", newTask);
     setTodosState((prevArray) => [
       ...prevArray,
       { id: nanoid(), name: newTask, completed: false },
@@ -70,7 +68,7 @@ export default function Form() {
 
   // Update:
 
-  // update checked:
+  // Update checked:
   const handleCheck = (id: string) => {
     setTodosState((prevArray) =>
       prevArray.map((todo) =>
@@ -85,11 +83,7 @@ export default function Form() {
     setTodosState(updatedTodos);
   };
 
-  // filter :
-  /**
-   * handleFilter filtered by state completed || !completed
-   *
-   */
+  // Filter:
   const handleFilter = (e: MouseEvent<HTMLButtonElement>) => {
     const value: string = e.currentTarget.value;
     setFilter(value);
@@ -105,40 +99,28 @@ export default function Form() {
     }
   };
 
-  const renderTodos = getFilteredTodos().map((todo) => (
-    <TodoItem
-      key={todo.id}
-      id={todo.id}
-      name={todo.name}
-      completed={todo.completed}
-      handleDelete={() => handleDelete(todo.id)}
-      handleCheck={() => handleCheck(todo.id)}
-    />
-  ));
-
   // 3. ***Render***
   return (
     <div className="max-w-md mx-auto mt-10 p-4 bg-white rounded shadow-lg">
       <h1 className="text-4xl text-center mb-4">Encore une todo liste </h1>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="formGroup mb-2">
-          <Label name={"inputName"} title={"Saisir nom de la tâche"} />
+          <Label name="inputName" title="Saisir nom de la tâche" />
           <Input
-            type={"text"}
+            type="text"
             inputState={inputState}
             handleInputChange={handleInputChange}
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Ajouter
-        </button>
+        <ButtonForm type="submit" textButton="Ajouter" />
       </form>
 
-      <ul className="mb-4">{renderTodos}</ul>
+      <ToDoList
+        todos={getFilteredTodos()}
+        handleDelete={handleDelete}
+        handleCheck={handleCheck}
+      />
 
       <div id="filter" className="flex justify-around">
         <button
@@ -161,9 +143,7 @@ export default function Form() {
           onClick={handleFilter}
           type="button"
           value="Toutes"
-          className="px-3 py-1 bg-gray-700 text-white rounded-md 
-          hover:bg-gray-500
-          "
+          className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-500"
         >
           Toutes
         </button>
