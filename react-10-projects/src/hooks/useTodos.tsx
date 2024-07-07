@@ -1,11 +1,20 @@
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import todoArray, {
   EnumtodoItem as EnumtypeItem,
 } from "../components/todos/todoArray";
 
 export default function useTodos(initialTodos = todoArray) {
-  const [todosState, setTodosState] = useState<EnumtypeItem[]>(initialTodos);
+  const [todosState, setTodosState] = useState<EnumtypeItem[]>(() => {
+    // Load from localStorage if available, otherwise use initialTodos
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : initialTodos;
+  });
+
+  // Save todos to localStorage whenever todoSate changes
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todosState));
+  }, [todosState]);
 
   // 2. ***Behavior*** :
   // CRUD :

@@ -4,7 +4,6 @@ import Filter from "../filter/Filter";
 import ButtonForm from "../todos/Button";
 import Input from "../todos/Input";
 import Label from "../todos/Label";
-import Todolist from "../todos/Todolist";
 
 export default function Form() {
   // 1. ***State***
@@ -72,7 +71,7 @@ export default function Form() {
   // 3. ***Render***
   return (
     <div className="max-w-md mx-auto mt-10 p-4 bg-white rounded shadow-lg">
-      <h1 className="text-4xl text-center mb-4">Encore une todo liste </h1>
+      <h1 className="text-4xl text-center mb-4">Ma to do liste </h1>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="formGroup mb-2">
           <Label name="inputName" title="Saisir nom de la tâche" />
@@ -86,11 +85,11 @@ export default function Form() {
         <ButtonForm type="submit" textButton="Ajouter" />
       </form>
 
-      <Todolist
+      {/* <Todolist
         todos={getFilteredTodos()}
         handleDelete={handleDelete}
         handleCheck={handleCheck}
-      />
+      /> */}
 
       <Filter handleFilter={handleFilter} />
     </div>
