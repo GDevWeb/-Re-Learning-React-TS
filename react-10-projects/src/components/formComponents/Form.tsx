@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
+import Filter from "../filter/Filter";
 import ButtonForm from "../todos/Button";
 import Input from "../todos/Input";
 import Label from "../todos/Label";
@@ -122,32 +123,7 @@ export default function Form() {
         handleCheck={handleCheck}
       />
 
-      <div id="filter" className="flex justify-around">
-        <button
-          onClick={handleFilter}
-          type="button"
-          value="Complété"
-          className="px-3 py-1 bg-green-700 text-white rounded-md hover:bg-green-500"
-        >
-          Terminées
-        </button>
-        <button
-          onClick={handleFilter}
-          type="button"
-          value="Non complété"
-          className="px-3 py-1 bg-yellow-700 text-white rounded-md hover:bg-yellow-500"
-        >
-          Non complétées
-        </button>
-        <button
-          onClick={handleFilter}
-          type="button"
-          value="Toutes"
-          className="px-3 py-1 bg-gray-700 text-white rounded-md hover:bg-gray-500"
-        >
-          Toutes
-        </button>
-      </div>
+      <Filter handleFilter={handleFilter} />
     </div>
   );
 }
