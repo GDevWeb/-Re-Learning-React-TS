@@ -1,27 +1,24 @@
-import { nanoid } from "nanoid";
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
+import useTodos from "../../hooks/useTodos"; // Adjust the path accordingly
 import Filter from "../filter/Filter";
 import ButtonForm from "../todos/Button";
 import Input from "../todos/Input";
 import Label from "../todos/Label";
-import todoArray, { EnumtodoItem as EnumtypeItem } from "../todos/todoArray";
-import ToDoList from "../todos/Todolist";
+import Todolist from "../todos/Todolist";
 
 export default function Form() {
   // 1. ***State***
   const [inputState, setInputState] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [todosState, setTodosState] = useState<EnumtypeItem[]>(todoArray);
   const [filter, setFilter] = useState<string>("Toutes");
 
-  // LocalStorage :
+  const { todosState, addTask, handleCheck, handleDelete } = useTodos();
 
-  // ClearErrorMessage  after 20 seconds:
+  // Clear error message after 20 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setError(null);
     }, 20000);
-
     return () => clearTimeout(timer);
   }, [error]);
 
@@ -57,34 +54,6 @@ export default function Form() {
     }
   };
 
-  // CRUD :
-
-  // Create:
-  const addTask = (newTask: string) => {
-    setTodosState((prevArray) => [
-      ...prevArray,
-      { id: nanoid(), name: newTask, completed: false },
-    ]);
-  };
-
-  // Update:
-
-  // Update checked:
-  const handleCheck = (id: string) => {
-    setTodosState((prevArray) =>
-      prevArray.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
-
-  // Delete:
-  const handleDelete = (id: string) => {
-    const updatedTodos = todosState.filter((todo) => todo.id !== id);
-    setTodosState(updatedTodos);
-  };
-
-  // Filter:
   const handleFilter = (e: MouseEvent<HTMLButtonElement>) => {
     const value: string = e.currentTarget.value;
     setFilter(value);
@@ -117,7 +86,7 @@ export default function Form() {
         <ButtonForm type="submit" textButton="Ajouter" />
       </form>
 
-      <ToDoList
+      <Todolist
         todos={getFilteredTodos()}
         handleDelete={handleDelete}
         handleCheck={handleCheck}
